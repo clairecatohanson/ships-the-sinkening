@@ -1,0 +1,73 @@
+title Shipping Ships API
+
+participant Client
+participant Python
+participant NSS Handler
+participant JSONServer
+participant DockView
+participant HaulerView
+participant ShipView
+participant Database
+
+
+Client->Python:GET request to "/docks"
+Python->JSONServer:Run do_GET() method
+note over JSONServer:Parse the url into a url_dictionary:\n{ \n   "requested_resource": "docks",\n   "query_params": dictionary of queries, if present in url string,\n   "pk": 0 by default, or the 3rd item in the path_params list\n}
+note over JSONServer: if requested resource == "docks" AND pk != 0
+JSONServer->DockView: run retrieve_dock()
+DockView->Database: execute SQL to \n(SELECT * FROM Dock WHERE id = pk)
+Database-->JSONServer: here's the specific dock you requested \nin JSON format
+JSONServer-->NSS Handler: invoke response(), passing in the \nJSON body and a status code
+NSS Handler-->Client: here's the specific dock you requested \nin JSON format along with a status code and headers
+note over JSONServer: if requested resource == "docks" AND pk == 0
+JSONServer->DockView: run list_docks()
+DockView->Database: execute SQL to \n(SELECT * FROM Dock)
+Database-->JSONServer: here's all the docks in JSON format
+JSONServer-->NSS Handler: invoke response(), passing in the \nJSON body and a status code
+NSS Handler-->Client: here's the specific dock you requested \nin JSON format along with a status code and headers
+
+
+space
+space
+space 
+space
+space
+space
+Client->Python:GET request to "/haulers"
+Python->JSONServer:Run do_GET() method
+note over JSONServer:Parse the url into a url_dictionary:\n{ \n   "requested_resource": "haulers",\n   "query_params": dictionary of queries, if present in url string,\n   "pk": 0 by default, or the 3rd item in the path_params list\n}
+note over JSONServer: if requested resource == "haulers" AND pk != 0
+JSONServer->HaulerView: run retrieve_hauler()
+HaulerView->Database: execute SQL to \n(SELECT * FROM Hauler WHERE id = pk)
+Database-->JSONServer: here's the specific hauler you requested in JSON format
+JSONServer-->NSS Handler:invoke response(), passing in the \nJSON body and a status code
+NSS Handler-->Client: here's the specific dock you requested \nin JSON format along with a status code and headers
+note over JSONServer: if requested resource == "haulers" AND pk == 0
+JSONServer->HaulerView: run list_haulers()
+HaulerView->Database: execute SQL to \n(SELECT * FROM Hauler)
+Database-->JSONServer: here's all the haulers in JSON format
+JSONServer-->NSS Handler:invoke response(), passing in the \nJSON body and a status code
+NSS Handler-->Client: here's the specific dock you requested \nin JSON format along with a status code and headers
+
+
+space
+space
+space
+space
+space
+space 
+Client->Python:GET request to "/ships"
+Python->JSONServer:Run do_GET() method
+note over JSONServer:Parse the url into a url_dictionary:\n{ \n   "requested_resource": "ships",\n   "query_params": dictionary of queries, if present in url string,\n   "pk": 0 by default, or the 3rd item in the path_params list\n}
+note over JSONServer: if requested resource == "ships" AND pk != 0
+JSONServer->ShipView: run retrieve_ship()
+ShipView->Database: execute SQL to \n(SELECT * FROM Ship WHERE id = pk)
+Database-->JSONServer: here's the specific ship you requested in JSON format
+JSONServer-->NSS Handler:invoke response(), passing in the \nJSON body and a status code
+NSS Handler-->Client: here's the specific dock you requested \nin JSON format along with a status code and headers
+note over JSONServer: if requested resource == "ships" AND pk == 0
+JSONServer->ShipView: run list_ships()
+ShipView->Database: execute SQL to \n(SELECT * FROM Ship)
+Database-->JSONServer: here's all the ships in JSON format
+JSONServer-->NSS Handler:invoke response(), passing in the \nJSON body and a status code
+NSS Handler-->Client: here's the specific dock you requested \nin JSON format along with a status code and headers
