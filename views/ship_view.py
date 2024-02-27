@@ -2,7 +2,7 @@ import sqlite3
 import json
 
 
-def update_ship(id, ship_data):
+def update_ship(pk, ship_data):
     with sqlite3.connect("./shipping.db") as conn:
         db_cursor = conn.cursor()
 
@@ -14,7 +14,7 @@ def update_ship(id, ship_data):
                     hauler_id = ?
             WHERE id = ?
             """,
-            (ship_data["name"], ship_data["hauler_id"], id),
+            (ship_data["name"], ship_data["hauler_id"], pk),
         )
 
         rows_affected = db_cursor.rowcount
